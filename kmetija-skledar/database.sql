@@ -45,8 +45,9 @@ CREATE TABLE products (
     price        DECIMAL(8,2) NOT NULL CHECK (price >= 0),
     packaging    VARCHAR(30)  NOT NULL,          -- npr. 0,5 l / 250 g
     stock        INT NOT NULL DEFAULT 0 CHECK (stock >= 0),
-    image        VARCHAR(255),                   -- pot do slike, npr. img/olje-05.jpg
+    image        VARCHAR(255),                   -- pot do naložene slike, npr. uploads/izdelki/3f9a1c2e.jpg (NULL = ilustracija)
     active       TINYINT(1) NOT NULL DEFAULT 1,  -- 0 = skrit v trgovini
+    featured     TINYINT(1) NOT NULL DEFAULT 0,  -- 1 = izpostavljen na domači strani
     created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_category) REFERENCES categories(id_category)
 ) ENGINE=InnoDB;
@@ -88,11 +89,11 @@ INSERT INTO categories (id_category, name, description) VALUES
 (2, 'Bučnice',        'Surove, pražene in oplemenitene bučnice.'),
 (3, 'Darilni paketi', 'Kombinacije izdelkov za darilo.');
 
-INSERT INTO products (id_category, name, description, price, packaging, stock, image) VALUES
-(1, 'Bučno olje',               'Hladno stiskano bučno olje s kmetije Skledar.', 7.00,  '0,25 l', 40, 'img/olje-025.jpg'),
-(1, 'Bučno olje',               'Hladno stiskano bučno olje s kmetije Skledar.', 12.00, '0,5 l',  60, 'img/olje-05.jpg'),
-(1, 'Bučno olje',               'Hladno stiskano bučno olje s kmetije Skledar.', 22.00, '1 l',    30, 'img/olje-1.jpg'),
-(2, 'Lupljene bučnice',         'Surove lupljene bučnice.',                      4.00,  '250 g',  50, 'img/bucnice-surove.jpg'),
-(2, 'Pražene soljene bučnice',  'Pražene in rahlo soljene bučnice.',             4.50,  '250 g',  50, 'img/bucnice-prazene.jpg'),
-(2, 'Bučnice v čokoladi',       'Bučnice, oblite s temno čokolado.',             5.00,  '150 g',  25, 'img/bucnice-cokolada.jpg'),
-(3, 'Darilni paket',            'Bučno olje 0,5 l in pražene bučnice 250 g.',    16.00, 'paket',  15, 'img/darilni-paket.jpg');
+INSERT INTO products (id_category, name, description, price, packaging, stock, image, featured) VALUES
+(1, 'Bučno olje',               'Hladno stiskano bučno olje s kmetije Skledar.', 7.00,  '0,25 l', 40, NULL, 0),
+(1, 'Bučno olje',               'Hladno stiskano bučno olje s kmetije Skledar.', 12.00, '0,5 l',  60, NULL, 1),
+(1, 'Bučno olje',               'Hladno stiskano bučno olje s kmetije Skledar.', 22.00, '1 l',    30, NULL, 1),
+(2, 'Lupljene bučnice',         'Surove lupljene bučnice.',                      4.00,  '250 g',  50, NULL, 0),
+(2, 'Pražene soljene bučnice',  'Pražene in rahlo soljene bučnice.',             4.50,  '250 g',  50, NULL, 1),
+(2, 'Bučnice v čokoladi',       'Bučnice, oblite s temno čokolado.',             5.00,  '150 g',  25, NULL, 0),
+(3, 'Darilni paket',            'Bučno olje 0,5 l in pražene bučnice 250 g.',    16.00, 'paket',  15, NULL, 1);

@@ -1,0 +1,5 @@
+# Naložene slike se samo prikazujejo – PHP ali drugih skript se v tej mapi ne da zagnati
+<FilesMatch "\.(php|phtml|phar|php[0-9]|cgi|pl|py|sh)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes

@@ -2,13 +2,17 @@
 $pageTitle  = 'Domov';
 $activePage = 'domov';
 require __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/slike.php';
+require_once __DIR__ . '/includes/cart.php';
 
-// Izpostavljeni izdelki iz baze
+// Izpostavljeni izdelki (admin jih označi pri urejanju izdelka). Če jih je manj kot 4,
+// prazna mesta zapolnijo drugi izdelki na zalogi, da razdelek nikoli ni prazen.
 $featured = $pdo->query(
-    'SELECT p.id_product, p.id_category, p.name, p.packaging, p.price, c.name AS category
+    'SELECT p.id_product, p.id_category, p.name, p.packaging, p.price, p.stock, p.image, c.name AS category
      FROM products p JOIN categories c ON c.id_category = p.id_category
-     WHERE p.active = 1 AND p.id_product IN (2, 3, 5, 7)
-     ORDER BY p.id_category, p.price'
+     WHERE p.active = 1
+     ORDER BY p.featured DESC, p.stock > 0 DESC, p.id_category, p.price
+     LIMIT 4'
 )->fetchAll();
 ?>
 <main>
@@ -45,6 +49,7 @@ $featured = $pdo->query(
         </div>
     </section>
 
+    <?php if ($featured): ?>
     <section class="section">
         <div class="section-head">
             <h2>Iz naše ponudbe</h2>
@@ -56,6 +61,7 @@ $featured = $pdo->query(
             <?php endforeach; ?>
         </div>
     </section>
+    <?php endif; ?>
 
     <section id="o-kmetiji" class="about">
         <div class="about-img">[fotografija kmetije ali babice in dedka pri stiskanju olja]</div>

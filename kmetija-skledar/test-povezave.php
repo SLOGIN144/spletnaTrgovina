@@ -1,6 +1,7 @@
 <?php
 // Preverjanje povezave: odpri http://localhost/kmetija-skledar/test-povezave.php
-require 'config/db.php';
+require_once __DIR__ . '/includes/auth.php';
+require_admin(); // stran za preverjanje razkriva podatke iz baze, zato samo za admina
 
 $izdelki = $pdo->query(
     'SELECT p.name, p.packaging, p.price, p.stock, c.name AS category

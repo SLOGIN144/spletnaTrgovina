@@ -37,16 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ->execute([password_hash($password, PASSWORD_DEFAULT), $user['id_user']]);
             }
 
-            session_regenerate_id(true); // zaščita pred prevzemom seje
-            $_SESSION['user'] = [
-                'id'         => (int) $user['id_user'],
-                'first_name' => $user['first_name'],
-                'last_name'  => $user['last_name'],
-                'email'      => $user['email'],
-                'role'       => $user['role'],
-            ];
+            login_user($user); // podatki uporabnika gredo v sejo (includes/auth.php)
 
             set_flash('success', 'Pozdravljeni, ' . $user['first_name'] . '! Uspešno ste prijavljeni.');
+
+            // Vrni na stran, ki jo je hotel odpreti pred prijavo (pot shrani require_login na strežniku)
+            $back = $_SESSION['after_login'] ?? '';
+            unset($_SESSION['after_login']);
+            if (str_starts_with($back, BASE)) {
+                header('Location: ' . $back);
+                exit;
+            }
             redirect($user['role'] === 'admin' ? 'admin/index.php' : 'index.php');
         }
     }

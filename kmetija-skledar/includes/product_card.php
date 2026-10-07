@@ -1,13 +1,13 @@
-<?php // Kartica izdelka – pričakuje $p (vrstica iz tabele products + category) ?>
+<?php // Kartica izdelka – pričakuje $p (vrstica iz tabele products + category, z image in stock) ?>
 <article class="product-card">
-    <div class="product-img"><?= product_art((int) $p['id_category']) ?></div>
+    <a href="<?= url('izdelek.php?id=' . $p['id_product']) ?>" class="product-img" tabindex="-1" aria-hidden="true"><?= product_image($p) ?></a>
     <div class="product-body">
         <div class="product-cat"><?= e($p['category']) ?></div>
-        <div class="product-name"><?= e($p['name']) ?></div>
+        <a href="<?= url('izdelek.php?id=' . $p['id_product']) ?>" class="product-name"><?= e($p['name']) ?></a>
         <div class="product-pack"><?= e($p['packaging']) ?></div>
         <div class="product-foot">
-            <span class="price"><?= number_format((float) $p['price'], 2, ',', '.') ?> €</span>
-            <button type="button" class="btn btn-green btn-sm" disabled title="Košarica pride v naslednji nalogi">V košarico</button>
+            <span class="price"><?= money($p['price']) ?></span>
+            <?= add_to_cart_form($p) ?>
         </div>
     </div>
 </article>
